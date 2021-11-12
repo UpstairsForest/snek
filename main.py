@@ -72,33 +72,31 @@ while not game_over:
                 direction[0] = -1
                 direction[1] = 0
 
-    t += clock.tick()
-    if t >= fiddlies.ticks_per_frame:
+    clock.tick(fiddlies.fps)
 
-        head += step * direction
-        if (head >= [dis_x, dis_y]).any() or (head < [0, 0]).any() \
-                or ((head == snek).all(1).any() and not (direction == [0, 0]).all()):
-            game_over = True
-        elif (head == apple).all():
-            snek = np.append(np.array([head]), snek, axis=0)
-            apple = reposition_apple(snek)
-            score += 1
-            text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
-        else:
-            snek = np.append(np.array([head]), snek[:-1], axis=0)
+    head += step * direction
+    if (head >= [dis_x, dis_y]).any() or (head < [0, 0]).any() \
+            or ((head == snek).all(1).any() and not (direction == [0, 0]).all()):
+        game_over = True
+    elif (head == apple).all():
+        snek = np.append(np.array([head]), snek, axis=0)
+        apple = reposition_apple(snek)
+        score += 1
+        text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
+    else:
+        snek = np.append(np.array([head]), snek[:-1], axis=0)
 
-        dis.fill(fiddlies.background_colour)
-        dis.blit(text, text_frame)
+    dis.fill(fiddlies.background_colour)
+    dis.blit(text, text_frame)
 
-        pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0] + bw, apple[1] + bw, step - 2 * bw, step - 2 * bw])
-        pygame.draw.rect(dis, fiddlies.apple_border_colour, [apple[0], apple[1], step, step],
+    pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0] + bw, apple[1] + bw, step - 2 * bw, step - 2 * bw])
+    pygame.draw.rect(dis, fiddlies.apple_border_colour, [apple[0], apple[1], step, step],
+                     width=bw, border_radius=5)
+    for chunk in snek:
+        pygame.draw.rect(dis, fiddlies.snake_colour, [chunk[0] + bw, chunk[1] + bw, step - 2 * bw, step - 2 * bw])
+        pygame.draw.rect(dis, fiddlies.snake_border_colour, [chunk[0], chunk[1], step, step],
                          width=bw, border_radius=5)
-        for chunk in snek:
-            pygame.draw.rect(dis, fiddlies.snake_colour, [chunk[0] + bw, chunk[1] + bw, step - 2 * bw, step - 2 * bw])
-            pygame.draw.rect(dis, fiddlies.snake_border_colour, [chunk[0], chunk[1], step, step],
-                             width=bw, border_radius=5)
-        pygame.display.update()
-        t = 0
+    pygame.display.update()
 
 pygame.quit()
 quit()

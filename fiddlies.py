@@ -14,7 +14,7 @@ step = 50
 border_width = 8
 
 # game speed
-ticks_per_frame = 200
+fps = 8
 
 # checks:
 if (dis_x%step, dis_y%step) != (0, 0):

@@ -1,22 +1,30 @@
 # https://www.edureka.co/blog/snake-game-with-pygame/
 import pygame
+import numpy as np
 
 import fiddlies
 
 
 dis_x = 900
 dis_y = 900
-x = dis_x//2
-y = dis_y//2
+step = 100
+x = dis_x // 2 - step // 2
+y = dis_y // 2 - step // 2
 
 pygame.init()
 dis = pygame.display.set_mode((dis_x, dis_y))
-pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, 10, 10])
+pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
 pygame.display.update()
 pygame.display.set_caption("Kukik")
 
 game_over = False
+apple_exists = False
 while not game_over:
+    if not apple_exists:
+        apple_x = x
+        apple_y = y
+        while apple_x == x:
+            apple_x = np.random
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
@@ -24,15 +32,19 @@ while not game_over:
         # some events are not keypresses
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
-                y -= 10
+                y -= step
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                x += 10
+                x += step
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                y += 10
+                y += step
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                x -= 10
+                x -= step
+
+        if x >= dis_x or x < 0 or y >= dis_y or y < 0:
+            game_over = True
+
         dis.fill(fiddlies.background_colour)
-        pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, 10, 10])
+        pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
         pygame.display.update()
 
 pygame.quit()

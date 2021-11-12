@@ -18,7 +18,16 @@ pygame.display.update()
 pygame.display.set_caption("Kukik")
 
 game_over = False
+apple_exists = False
 while not game_over:
+    if not apple_exists:
+        apple_x = x
+        while apple_x == x and apple_x >= dis_x:
+            # dis_x/step gives the number of apples that can fit on the display's width
+            apple_x = step * int(dis_x/step * np.random.rand())
+        apple_y = y
+        while apple_y == y and apple_y >= dis_y:
+            apple_y = step * int(dis_y/step * np.random.rand())
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
@@ -39,6 +48,7 @@ while not game_over:
 
         dis.fill(fiddlies.background_colour)
         pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
+        pygame.draw.rect(dis, fiddlies.apple_colour, [apple_x, apple_y, step, step])
         pygame.display.update()
 
 pygame.quit()

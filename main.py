@@ -51,18 +51,17 @@ while not game_over:
         if event.type == pygame.QUIT:
             game_over = True
 
-        # some events are not keypresses
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and not (direction == [0, 1]).all():
                 direction[0] = 0
                 direction[1] = -1
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and not (direction == [-1, 0]).all():
                 direction[0] = 1
                 direction[1] = 0
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not (direction == [0, -1]).all():
                 direction[0] = 0
                 direction[1] = 1
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and not (direction == [1, 0]).all():
                 direction[0] = -1
                 direction[1] = 0
 

@@ -1,5 +1,7 @@
 # RGB values
 background_colour = (0, 0, 0)
+text_colour = (175, 175, 175)
+
 snake_colour = (150, 255, 70)
 snake_border_colour = (50, 75, 50)
 apple_colour = (255, 100, 50)

@@ -32,6 +32,13 @@ pygame.draw.rect(dis, fiddlies.snake_border_colour, [head[0], head[1], step, ste
                              width=bw, border_radius=5)
 pygame.display.update()
 pygame.display.set_caption("Kukik")
+
+score = 0
+font = pygame.font.SysFont("arialblack", 90)
+text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
+text_frame = text.get_rect()
+text_frame.center = (dis_x//2, dis_y//2)
+
 clock = pygame.time.Clock()
 
 snek = np.array([head])
@@ -72,13 +79,17 @@ while not game_over:
         if (head >= [dis_x, dis_y]).any() or (head < [0, 0]).any()\
                 or ((head == snek).all(1).any() and not (direction == [0, 0]).all()):
             game_over = True
-        elif head[0] == apple[0] and head[1] == apple[1]:
+        elif (head == apple).all():
             snek = np.append(np.array([head]), snek, axis=0)
             apple = reposition_apple(snek)
+            score += 1
+            text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
         else:
             snek = np.append(np.array([head]), snek[:-1], axis=0)
 
         dis.fill(fiddlies.background_colour)
+        dis.blit(text, text_frame)
+
         pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0]+bw, apple[1]+bw, step-2*bw, step-2*bw])
         pygame.draw.rect(dis, fiddlies.apple_border_colour, [apple[0], apple[1], step, step],
                          width=bw, border_radius=5)

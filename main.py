@@ -71,13 +71,14 @@ while not game_over:
             game_over = True
         elif head[0] == apple[0] and head[1] == apple[1]:
             snek = np.append(np.array([head]), snek, axis=0)
+            apple = reposition_apple(apple)
         else:
             snek = np.append(np.array([head]), snek[:-1], axis=0)
 
         dis.fill(fiddlies.background_colour)
+        pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0], apple[1], step, step])
         for chunk in snek:
             pygame.draw.rect(dis, fiddlies.snake_colour, [chunk[0], chunk[1], step, step])
-        pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0], apple[1], step, step])
         pygame.display.update()
         t = 0
 

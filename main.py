@@ -22,12 +22,14 @@ apple_exists = False
 while not game_over:
     if not apple_exists:
         apple_x = x
-        while apple_x == x and apple_x >= dis_x:
+        while apple_x == x or apple_x >= dis_x:
             # dis_x/step gives the number of apples that can fit on the display's width
             apple_x = step * int(dis_x/step * np.random.rand())
         apple_y = y
-        while apple_y == y and apple_y >= dis_y:
+        while apple_y == y or apple_y >= dis_y:
             apple_y = step * int(dis_y/step * np.random.rand())
+        apple_exists = True
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True

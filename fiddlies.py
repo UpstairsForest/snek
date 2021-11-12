@@ -6,7 +6,7 @@ apple_colour = (255, 100, 50)
 # sizes
 dis_x = 900
 dis_y = 900
-step = 100
+step = 45
 
 # game speed
-ticks_per_frame = 500
+ticks_per_frame = 200

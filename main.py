@@ -18,13 +18,7 @@ pygame.display.update()
 pygame.display.set_caption("Kukik")
 
 game_over = False
-apple_exists = False
 while not game_over:
-    if not apple_exists:
-        apple_x = x
-        apple_y = y
-        while apple_x == x:
-            apple_x = np.random
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True

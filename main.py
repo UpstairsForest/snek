@@ -22,7 +22,6 @@ dis_y = fiddlies.dis_y
 step = fiddlies.step
 bw = fiddlies.border_width
 head = step * ((np.array([int(dis_x / 2), int(dis_y / 2)])) // step)
-print(head / step)
 
 pygame.init()
 dis = pygame.display.set_mode((dis_x, dis_y))
@@ -43,17 +42,12 @@ text_frame.center = (dis_x // 2, dis_y // 2)
 clock = pygame.time.Clock()
 
 snek = np.array([head])
+apple = reposition_apple(snek)
 direction = np.array([0, 0], dtype=int)
 
 game_over = False
-apple_exists = False
 
-t = 0
 while not game_over:
-    if not apple_exists:
-        apple = reposition_apple(snek)
-        apple_exists = True
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True

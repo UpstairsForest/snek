@@ -5,16 +5,14 @@ import numpy as np
 import fiddlies
 
 
-def reposition_apple(passed_array):
-    X = passed_array[0]
-    Y = passed_array[1]
+def reposition_apple(passed_snek):
+    X = passed_snek[0, 0]
+    Y = passed_snek[0, 1]
 
     x = X
-    while x == Y or x >= dis_x:
-        # dis_x/step gives the number of apples that can fit on the display's width
-        x = step * int(dis_x / step * np.random.rand())
     y = Y
-    while y == Y or y >= dis_y:
+    while x >= dis_x or y >= dis_y or ([x, y] == passed_snek).all(1).any():
+        x = step * int(dis_x / step * np.random.rand())
         y = step * int(dis_y / step * np.random.rand())
     return x, y
 
@@ -22,7 +20,8 @@ def reposition_apple(passed_array):
 dis_x = fiddlies.dis_x
 dis_y = fiddlies.dis_y
 step = fiddlies.step
-head = np.array([dis_x // 2 - step // 2, dis_y // 2 - step // 2])
+head = step * ((np.array([int(dis_x/2), int(dis_y/2)])) // step)
+print(head/step)
 
 pygame.init()
 dis = pygame.display.set_mode((dis_x, dis_y))
@@ -41,7 +40,7 @@ t = 0
 
 while not game_over:
     if not apple_exists:
-        apple = reposition_apple(head)
+        apple = reposition_apple(snek)
         apple_exists = True
 
     for event in pygame.event.get():
@@ -71,7 +70,7 @@ while not game_over:
             game_over = True
         elif head[0] == apple[0] and head[1] == apple[1]:
             snek = np.append(np.array([head]), snek, axis=0)
-            apple = reposition_apple(apple)
+            apple = reposition_apple(snek)
         else:
             snek = np.append(np.array([head]), snek[:-1], axis=0)
 

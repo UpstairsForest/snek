@@ -7,3 +7,6 @@ apple_colour = (255, 100, 50)
 dis_x = 900
 dis_y = 900
 step = 100
+
+# game speed
+ticks_per_frame = 500

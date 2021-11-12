@@ -5,9 +5,9 @@ import numpy as np
 import fiddlies
 
 
-dis_x = 900
-dis_y = 900
-step = 100
+dis_x = fiddlies.dis_x
+dis_y = fiddlies.dis_y
+step = fiddlies.step
 x = dis_x // 2 - step // 2
 y = dis_y // 2 - step // 2
 

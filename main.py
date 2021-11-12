@@ -69,7 +69,8 @@ while not game_over:
     if t >= fiddlies.ticks_per_frame:
 
         head += step*direction
-        if head[0] >= dis_x or head[0] < 0 or head[1] >= dis_y or head[1] < 0:
+        if (head >= [dis_x, dis_y]).any() or (head < [0, 0]).any()\
+                or ((head == snek).all(1).any() and not (direction == [0, 0]).all()):
             game_over = True
         elif head[0] == apple[0] and head[1] == apple[1]:
             snek = np.append(np.array([head]), snek, axis=0)

@@ -1,8 +1,14 @@
 # https://www.edureka.co/blog/snake-game-with-pygame/
+import time
 import pygame
 import numpy as np
 
 import fiddlies
+
+
+def message(msg, colour):
+    text = font_style.render(msg, True, colour)
+    dis.blit(text, [dis_x//2, dis_y//2])
 
 
 dis_x = 900
@@ -20,6 +26,7 @@ pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
 pygame.display.update()
 pygame.display.set_caption("Kukik")
 
+font_style = pygame.font.SysFont("corbel", 50)
 clock = pygame.time.Clock()
 
 game_over = False
@@ -67,6 +74,9 @@ while not game_over:
 
     clock.tick(5)
     print(x, y)
+message("YOU DIED", fiddlies.apple_colour)
+pygame.display.update()
+time.sleep(2)
 
 pygame.quit()
 quit()

@@ -55,15 +55,19 @@ while not game_over:
             if (event.key == pygame.K_UP or event.key == pygame.K_w) and not (direction == [0, 1]).all():
                 direction[0] = 0
                 direction[1] = -1
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and not (direction == [-1, 0]).all():
+                break
+            elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and not (direction == [-1, 0]).all():
                 direction[0] = 1
                 direction[1] = 0
-            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not (direction == [0, -1]).all():
+                break
+            elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not (direction == [0, -1]).all():
                 direction[0] = 0
                 direction[1] = 1
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and not (direction == [1, 0]).all():
+                break
+            elif (event.key == pygame.K_LEFT or event.key == pygame.K_a) and not (direction == [1, 0]).all():
                 direction[0] = -1
                 direction[1] = 0
+                break
 
     clock.tick(fiddlies.fps)
 

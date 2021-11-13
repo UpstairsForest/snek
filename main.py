@@ -1,82 +1,95 @@
-# https://www.edureka.co/blog/snake-game-with-pygame/
-import time
 import pygame
 import numpy as np
 
 import fiddlies
 
 
-def message(msg, colour):
-    text = font_style.render(msg, True, colour)
-    dis.blit(text, [dis_x//2, dis_y//2])
+def reposition_apple(passed_snek):
+    X = passed_snek[0, 0]
+    Y = passed_snek[0, 1]
+
+    x = X
+    y = Y
+    while x >= dis_x or y >= dis_y or ([x, y] == passed_snek).all(1).any():
+        x = step * int(dis_x / step * np.random.rand())
+        y = step * int(dis_y / step * np.random.rand())
+    return x, y
 
 
-dis_x = 900
-dis_y = 900
-step = 50
-x = dis_x // 2
-y = dis_y // 2
-
-del_y = 0
-del_x = 0
+dis_x = fiddlies.dis_x
+dis_y = fiddlies.dis_y
+step = fiddlies.step
+bw = fiddlies.border_width
+head = step * ((np.array([int(dis_x / 2), int(dis_y / 2)])) // step)
 
 pygame.init()
 dis = pygame.display.set_mode((dis_x, dis_y))
-pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
+
+pygame.draw.rect(dis, fiddlies.snake_colour, [head[0] + bw, head[1] + bw, step - 2 * bw, step - 2 * bw])
+pygame.draw.rect(dis, fiddlies.snake_border_colour, [head[0], head[1], step, step],
+                 width=bw, border_radius=5)
 pygame.display.update()
 pygame.display.set_caption("Kukik")
 
-font_style = pygame.font.SysFont("corbel", 50)
+score = 0
+font = pygame.font.SysFont("corbel", 110, bold=True)
+text = font.render("SCORE", True, fiddlies.text_colour)
+text_frame = text.get_rect()
+text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
+text_frame.center = (dis_x // 2, dis_y // 2)
+
 clock = pygame.time.Clock()
 
-game_over = False
-apple_exists = False
-while not game_over:
-    if not apple_exists:
-        apple_x = x
-        while apple_x == x or apple_x >= dis_x:
-            # dis_x/step gives the number of apples that can fit on the display's width
-            apple_x = step * int(dis_x/step * np.random.rand())
-        apple_y = y
-        while apple_y == y or apple_y >= dis_y:
-            apple_y = step * int(dis_y/step * np.random.rand())
-        apple_exists = True
+snek = np.array([head])
+apple = reposition_apple(snek)
+direction = np.array([0, 0], dtype=int)
 
+game_over = False
+
+while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
 
-        # some events are not keypresses
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
-                del_x = 0
-                del_y = -step
-            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                del_x = step
-                del_y = 0
-            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                del_x = 0
-                del_y = step
-            elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                del_x = -step
-                del_y = 0
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and not (direction == [0, 1]).all():
+                direction[0] = 0
+                direction[1] = -1
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and not (direction == [-1, 0]).all():
+                direction[0] = 1
+                direction[1] = 0
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and not (direction == [0, -1]).all():
+                direction[0] = 0
+                direction[1] = 1
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and not (direction == [1, 0]).all():
+                direction[0] = -1
+                direction[1] = 0
 
-    x += del_x
-    y += del_y
+    clock.tick(fiddlies.fps)
 
-    if x >= dis_x or x < 0 or y >= dis_y or y < 0:
+    head += step * direction
+    if (head >= [dis_x, dis_y]).any() or (head < [0, 0]).any() \
+            or ((head == snek).all(1).any() and not (direction == [0, 0]).all()):
         game_over = True
+    elif (head == apple).all():
+        snek = np.append(np.array([head]), snek, axis=0)
+        apple = reposition_apple(snek)
+        score += 1
+        text = font.render(f"SCORE: {score}", True, fiddlies.text_colour)
+    else:
+        snek = np.append(np.array([head]), snek[:-1], axis=0)
 
     dis.fill(fiddlies.background_colour)
-    pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
-    pygame.draw.rect(dis, fiddlies.apple_colour, [apple_x, apple_y, step, step])
-    pygame.display.update()
+    dis.blit(text, text_frame)
 
-    clock.tick(5)
-    print(x, y)
-message("YOU DIED", fiddlies.apple_colour)
-pygame.display.update()
-time.sleep(2)
+    pygame.draw.rect(dis, fiddlies.apple_colour, [apple[0] + bw, apple[1] + bw, step - 2 * bw, step - 2 * bw])
+    pygame.draw.rect(dis, fiddlies.apple_border_colour, [apple[0], apple[1], step, step],
+                     width=bw, border_radius=5)
+    for chunk in snek:
+        pygame.draw.rect(dis, fiddlies.snake_colour, [chunk[0] + bw, chunk[1] + bw, step - 2 * bw, step - 2 * bw])
+        pygame.draw.rect(dis, fiddlies.snake_border_colour, [chunk[0], chunk[1], step, step],
+                         width=bw, border_radius=5)
+    pygame.display.update()
 
 pygame.quit()
 quit()

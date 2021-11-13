@@ -7,15 +7,20 @@ import fiddlies
 
 dis_x = 900
 dis_y = 900
-step = 100
-x = dis_x // 2 - step // 2
-y = dis_y // 2 - step // 2
+step = 50
+x = dis_x // 2
+y = dis_y // 2
+
+del_y = 0
+del_x = 0
 
 pygame.init()
 dis = pygame.display.set_mode((dis_x, dis_y))
 pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
 pygame.display.update()
 pygame.display.set_caption("Kukik")
+
+clock = pygame.time.Clock()
 
 game_over = False
 apple_exists = False
@@ -37,21 +42,31 @@ while not game_over:
         # some events are not keypresses
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
-                y -= step
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                x += step
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                y += step
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                x -= step
+                del_x = 0
+                del_y = -step
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                del_x = step
+                del_y = 0
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                del_x = 0
+                del_y = step
+            elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                del_x = -step
+                del_y = 0
 
-        if x >= dis_x or x < 0 or y >= dis_y or y < 0:
-            game_over = True
+    x += del_x
+    y += del_y
 
-        dis.fill(fiddlies.background_colour)
-        pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
-        pygame.draw.rect(dis, fiddlies.apple_colour, [apple_x, apple_y, step, step])
-        pygame.display.update()
+    if x >= dis_x or x < 0 or y >= dis_y or y < 0:
+        game_over = True
+
+    dis.fill(fiddlies.background_colour)
+    pygame.draw.rect(dis, fiddlies.snake_colour, [x, y, step, step])
+    pygame.draw.rect(dis, fiddlies.apple_colour, [apple_x, apple_y, step, step])
+    pygame.display.update()
+
+    clock.tick(5)
+    print(x, y)
 
 pygame.quit()
 quit()
